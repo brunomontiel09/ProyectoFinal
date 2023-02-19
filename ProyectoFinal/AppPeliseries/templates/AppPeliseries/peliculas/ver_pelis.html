@@ -1,0 +1,23 @@
+{% extends "AppPeliseries/padre.html" %}
+
+{% block titulopest %}<title>Posteos de Peliculas</title> {% endblock %}
+
+{% block body %}
+
+
+{% for pelicula in object_list %}
+
+   <p></p> Autor: {{pelicula.autor}}
+
+    <a href="{% url 'Detalle Peli' pelicula.pk %}"> Pelicula: {{pelicula.titulo}}</a>
+    <a href="{% url 'Editar Peli' pelicula.pk %}"> Editar Posteo</a>
+    <a href="{% url 'Borrar Peli' pelicula.pk %}"> Borrar Posteo</a>
+    </table>
+    
+    
+
+{% endfor%}
+
+<p><a class="btn btn-primary" href="{% url 'Crear Post Peli' %}">Nuevo Posteo</a></p>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "AppPeliseries/padre.html" %}
+
+{% block titulopest %}<title>Posteos sobre musica</title> {% endblock %}
+
+
+{% block body %}
+
+
+{% for musica in object_list %}
+
+   <p></p> Autor: {{musica.autor}}
+
+    <a href="{% url 'Detalle Musica' musica.pk %}"> musica: {{musica.titulo}}</a>
+    <a href="{% url 'Editar Musica' musica.pk %}"> Editar Posteo</a>
+    <a href="{% url 'Borrar Musica' musica.pk %}"> Borrar Posteo</a>
+    </table>
+    
+    
+
+{% endfor%}
+
+<p><a class="btn btn-primary" href="{% url 'Crear Post Musica' %}">Nuevo Posteo</a></p>
+
+{% endblock %}

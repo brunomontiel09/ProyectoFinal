@@ -1,0 +1,23 @@
+{% extends "AppPeliseries/padre.html" %}
+
+{% block titulopest %}<title>Posteos sobre Series</title> {% endblock %}
+
+{% block body %}
+
+
+{% for serie in object_list %}
+
+   <p></p> Autor: {{pelicula.autor}}
+
+    <a href="{% url 'Detalle Serie' serie.pk %}"> Serie: {{serie.titulo}}</a>
+    <a href="{% url 'Editar Serie' serie.pk %}"> Editar Posteo</a>
+    <a href="{% url 'Borrar Serie' serie.pk %}"> Borrar Posteo</a>
+    </table>
+    
+    
+
+{% endfor%}
+
+<p><a class="btn btn-primary" href="{% url 'Crear Post Serie' %}">Nuevo Posteo</a></p>
+
+{% endblock %}
