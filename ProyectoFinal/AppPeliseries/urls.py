@@ -33,6 +33,8 @@ urlpatterns = [
     
     
     path('/acerca_de/', acercaDe, name= 'Acerca de'),
+    path('/contacto/', contacto, name= 'Contacto'),
+
     
     
     

@@ -1,23 +1,34 @@
 {% extends "AppPeliseries/padre.html" %}
 
-{% block titulopest %}<title>Posteos sobre Series</title> {% endblock %}
+{% block titulopest %}<title>Posteos de Series</title> {% endblock %}
 
-{% block body %}
+{% block section %}
+            <br>
+            <h1 style="font-size:50px; color:rgb(43, 66, 97); font-family:verdana; font-size:300%"> Aca se pueden ver los posteos</h1> <hr style="width: 100%; height: 5px">
+            
+                <!-- Featured Project Row-->
+                <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
+                    <div class="col-xl-4 col-lg-5">
+                        <div class="featured-text text-center text-lg-left">
 
+                            <p class="text-black-50 mb-0">{% for serie in object_list %}
 
-{% for serie in object_list %}
+                                <p></p> Autor: {{serie.autor}}
+                             
+                                 <a href="{% url 'Detalle Serie' serie.pk %}"> Serie: {{serie.titulo}}</a>
+                                 <a href="{% url 'Editar Serie' serie.pk %}"> Editar Posteo</a>
+                                 <a href="{% url 'Borrar Serie' serie.pk %}"> Borrar Posteo</a>
+                                 <hr style="padding-bottom: 1px;">
+                                 
+                                 
+                             
+                             {% endfor%}
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-   <p></p> Autor: {{pelicula.autor}}
-
-    <a href="{% url 'Detalle Serie' serie.pk %}"> Serie: {{serie.titulo}}</a>
-    <a href="{% url 'Editar Serie' serie.pk %}"> Editar Posteo</a>
-    <a href="{% url 'Borrar Serie' serie.pk %}"> Borrar Posteo</a>
-    </table>
-    
-    
-
-{% endfor%}
-
-<p><a class="btn btn-primary" href="{% url 'Crear Post Serie' %}">Nuevo Posteo</a></p>
-
+                <div style="padding-left:10%; padding-bottom:3%">
+                <p><a class="btn btn-primary" href="{% url 'Crear Post Serie' %}">Nuevo Posteo</a></p>
+                </div>
 {% endblock %}

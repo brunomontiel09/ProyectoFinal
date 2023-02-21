@@ -3,6 +3,7 @@ from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView,CreateView, UpdateView
 from .models import *
+from .forms import *
 from django.urls import reverse_lazy
 # Create your views here.
 
@@ -24,14 +25,14 @@ class PeliDetalle(DetailView):
 class PeliCrear(CreateView):
     
     model=Pelicula
+    form_class= PeliculaForm
     template_name= 'AppPeliseries/peliculas/pelis_form.html'
-    fields= '__all__'
+    
     
 class PeliUpdate(UpdateView):
     model=Pelicula
     template_name= 'AppPeliseries/peliculas/pelis_form.html'
-
-    fields= '__all__'
+    form_class=PeliculaForm
 
 class PeliDelete(DeleteView):
     model=Pelicula
@@ -46,18 +47,20 @@ class SerieView(ListView):
     
 class SerieDetalle(DetailView):
     model=Serie
-    template_name= 'AppPeliseries/series/serie_detail.html'
+    template_name= 'AppPeliseries/series/series_detail.html'
 
 
 class SerieCrear(CreateView):
     model=Serie
+    form_class=SerieForm
     template_name= 'AppPeliseries/series/serie_form.html'
-    fields= '__all__'
+    
     
 class SerieUpdate(UpdateView):
     model=Serie
     template_name= 'AppPeliseries/series/serie_form.html'
-    fields= '__all__'
+    form_class=SerieForm
+    
 
 class SerieDelete(DeleteView):
     model=Serie
@@ -80,12 +83,12 @@ class MusicaDetalle(DetailView):
 class MusicaCrear(CreateView):
     model=Musica
     template_name= 'AppPeliseries/musica/music_form.html'
-    fields= '__all__'
+    form_class=MusicaForm
     
 class MusicaUpdate(UpdateView):
     model=Musica
     template_name= 'AppPeliseries/musica/music_form.html'
-    fields= '__all__'
+    form_class=MusicaForm
 
 class MusicaDelete(DeleteView):
     model=Musica
@@ -95,7 +98,10 @@ class MusicaDelete(DeleteView):
 def acercaDe(request):
     return render(request, "AppPeliseries/acercade.html")
 
-    
+def contacto(request):
+    return render(request, "AppPeliseries/contacto.html")
+
+
 '''class InicioView(ListView):
     model= Posteos
     template_name= 'AppPeliseries/inicio.html'''
