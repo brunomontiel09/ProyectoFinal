@@ -1,0 +1,26 @@
+{% extends "AppPeliseries/padre.html" %}
+
+{% block titulopest %}<title>Inicio</title> {% endblock %}
+
+{% block subtitulo %}
+<br>
+<h5 class="text-white-50 mx-auto mt-2 mb-5" style="font-size: 20px;"><form action="" method="POST">{% csrf_token %}
+
+        {{formulario.as_p}}
+        
+        <button type="submit" style="font-size: 30px;"> Iniciar Sesion</button>
+
+    </form></h2>
+
+{% endblock %}
+
+
+
+    
+    
+    
+    
+    
+    
+
+

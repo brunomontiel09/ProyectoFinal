@@ -1,11 +1,15 @@
 from django.urls import path
 from .views import *
-
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
+    #home
     path("/inicio/", inicio, name= "Inicio1" ),
-    #path("", InicioView.as_view(), name= "Inicio"),
-    
+    path("/logout/",LogoutView.as_view(template_name="AppPeliseries/logout.html"), name="Logout" ),
+    path("/editar/", editarusuario, name="Editar Usuario"),
+    path("/login/", inicioSesion, name = "Login"),
+    path("/registro/", registro, name = "Registro"),
+
     #peliculas
     path('/ver_pelis/', PeliView.as_view(), name= 'Ver Peliculas'),
     path('/crear_peli/', PeliCrear.as_view(), name= 'Crear Post Peli'),

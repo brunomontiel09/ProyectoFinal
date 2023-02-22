@@ -5,64 +5,68 @@ from django.views.generic.edit import DeleteView,CreateView, UpdateView
 from .models import *
 from .forms import *
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import login, authenticate
+
 # Create your views here.
 
 def inicio(request):
     return render(request, "AppPeliseries/inicio1.html")
 
 #peliculas
-class PeliView(ListView):
+class PeliView(LoginRequiredMixin, ListView):
     model= Pelicula
     template_name= 'AppPeliseries/peliculas/ver_pelis.html'
 
-class PeliDetalle(DetailView):
+class PeliDetalle(LoginRequiredMixin,DetailView):
     
     model=Pelicula
     
     template_name= 'AppPeliseries/peliculas/pelis_detail.html'
 
 
-class PeliCrear(CreateView):
+class PeliCrear(LoginRequiredMixin, CreateView):
     
     model=Pelicula
     form_class= PeliculaForm
     template_name= 'AppPeliseries/peliculas/pelis_form.html'
     
     
-class PeliUpdate(UpdateView):
+class PeliUpdate(LoginRequiredMixin, UpdateView):
     model=Pelicula
     template_name= 'AppPeliseries/peliculas/pelis_form.html'
     form_class=PeliculaForm
 
-class PeliDelete(DeleteView):
+class PeliDelete(LoginRequiredMixin, DeleteView):
     model=Pelicula
     template_name='AppPeliseries/peliculas/peli_delete.html'
     success_url= reverse_lazy('Ver Peliculas')
     
 
 #series
-class SerieView(ListView):
+class SerieView(LoginRequiredMixin, ListView):
     model= Serie
     template_name= 'AppPeliseries/series/ver_series.html'
     
-class SerieDetalle(DetailView):
+class SerieDetalle(LoginRequiredMixin, DetailView):
     model=Serie
     template_name= 'AppPeliseries/series/series_detail.html'
 
 
-class SerieCrear(CreateView):
+class SerieCrear(LoginRequiredMixin, CreateView):
     model=Serie
     form_class=SerieForm
     template_name= 'AppPeliseries/series/serie_form.html'
     
     
-class SerieUpdate(UpdateView):
+class SerieUpdate(LoginRequiredMixin, UpdateView):
     model=Serie
     template_name= 'AppPeliseries/series/serie_form.html'
     form_class=SerieForm
     
 
-class SerieDelete(DeleteView):
+class SerieDelete(LoginRequiredMixin, DeleteView):
     model=Serie
     template_name='AppPeliseries/series/serie_delete.html'
     success_url= reverse_lazy('Ver Series')
@@ -70,27 +74,27 @@ class SerieDelete(DeleteView):
     
     
 #musica
-class MusicView(ListView):
+class MusicView(LoginRequiredMixin, ListView):
     model= Musica
     template_name= 'AppPeliseries/musica/ver_musica.html'
     
 
-class MusicaDetalle(DetailView):
+class MusicaDetalle(LoginRequiredMixin, DetailView):
     model=Musica
     template_name= 'AppPeliseries/musica/music_detail.html'
 
 
-class MusicaCrear(CreateView):
+class MusicaCrear(LoginRequiredMixin, CreateView):
     model=Musica
     template_name= 'AppPeliseries/musica/music_form.html'
     form_class=MusicaForm
     
-class MusicaUpdate(UpdateView):
+class MusicaUpdate(LoginRequiredMixin, UpdateView):
     model=Musica
     template_name= 'AppPeliseries/musica/music_form.html'
     form_class=MusicaForm
 
-class MusicaDelete(DeleteView):
+class MusicaDelete(LoginRequiredMixin, DeleteView):
     model=Musica
     template_name='AppPeliseries/musica/music_delete.html'
     success_url= reverse_lazy('Ver Series')
@@ -101,7 +105,80 @@ def acercaDe(request):
 def contacto(request):
     return render(request, "AppPeliseries/contacto.html")
 
+def editarusuario(request):
+    
+    usuario=request.user
+    
+    if request.method == "POST":
+        
+        form =EditarUsuario(request.POST)
+        
+        if form.is_valid():
+            
+            info=form.cleaned_data
+            usuario.email=info["email"]
+            usuario.set_password(info["password1"])
+            usuario.first_name= info["first_name"]
+            usuario.last_name= info["last_name"]
+            
+            usuario.save()
+            
+            return render(request, "AppPeliseries/inicio1.html")
+        
+    else:
+            form  = EditarUsuario(initial={
+                "email":usuario.email,
+                "first_name":usuario.first_name,
+                "last_name":usuario.last_name,
+            })
+            
+    return render(request,"AppPeliseries/editar.html", {"formulario1": form, "usuario": usuario}  )
 
-'''class InicioView(ListView):
-    model= Posteos
-    template_name= 'AppPeliseries/inicio.html'''
+def inicioSesion(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data = request.POST)
+        if form.is_valid():
+            usuario= form.cleaned_data.get("username")
+            contra= form.cleaned_data.get("password")
+            
+            user= authenticate(username= usuario, password= contra)
+            
+            if user:
+                login(request, user)
+                
+                return render(request, "AppPeliseries/inicio1.html", {'mensaje': f"{user}"})
+            
+        else:
+            return render(request,"AppPeliseries/inicio1.html", {'mensaje': f"Datos invalidos"})
+            
+    else:
+        form= AuthenticationForm()
+    
+    return render(request, "AppPeliseries/login.html", {"formulario": form})
+
+
+def registro(request):
+    
+    if request.method == "POST":
+        form =NewUserForm(request.POST)
+        
+        if form.is_valid():
+            
+            username=form.cleaned_data["username"]
+            form.save()
+            context= {'mensaje': "Ahora puedes iniciar sesion"}
+            return render(request, "AppPeliseries/inicio1.html", context)
+        
+    else:
+            form  = NewUserForm()
+            
+    return render(request,"AppPeliseries/registro.html", {"formulario1": form} )
+
+
+
+#?next={% url 'homepage' %}"
+
+
+
+
+

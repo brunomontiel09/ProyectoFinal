@@ -7,7 +7,6 @@ class Pelicula(models.Model):
     autor=models.CharField(max_length=50, default="") # Ojear cuando tenga el login!!!!!!!!!!!!!
     titulo= models.CharField(max_length=50)
     añoestreno= models.IntegerField(default=0)
-    duracion=models.IntegerField()
     genero= models.CharField(max_length=30)
     body=models.TextField(default="")
     def __str__(self):
@@ -21,7 +20,7 @@ class Serie(models.Model):
     titulo= models.CharField(max_length=50)
     añoestreno= models.IntegerField(default=0)
     cantepisodios=models.IntegerField(default=1)
-    temporadas=models.IntegerField
+    temporadas=models.IntegerField(default=1)
     genero= models.CharField(max_length=30)
     body=models.TextField(default="")
     
