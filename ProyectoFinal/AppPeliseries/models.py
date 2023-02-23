@@ -6,9 +6,10 @@ from django.urls import reverse
 class Pelicula(models.Model):
     autor=models.CharField(max_length=50, default="") # Ojear cuando tenga el login!!!!!!!!!!!!!
     titulo= models.CharField(max_length=50)
-    añoestreno= models.IntegerField(default=0)
+    image= models.ImageField(null=True, blank=True,upload_to="images/pelis/")
+    añoestreno= models.IntegerField(blank=True)
     genero= models.CharField(max_length=30)
-    body=models.TextField(default="")
+    reseña=models.TextField(default="")
     def __str__(self):
         return str(self.autor) + "  |  " + str(self.titulo)
     def get_absolute_url(self):
@@ -18,11 +19,12 @@ class Pelicula(models.Model):
 class Serie(models.Model):
     autor=models.CharField(max_length=50, default="")
     titulo= models.CharField(max_length=50)
+    image= models.ImageField(null=True, blank=True,upload_to="images/series/")
     añoestreno= models.IntegerField(default=0)
     cantepisodios=models.IntegerField(default=1)
     temporadas=models.IntegerField(default=1)
     genero= models.CharField(max_length=30)
-    body=models.TextField(default="")
+    reseña=models.TextField(default="")
     
     def __str__(self):
         return self.autor + "  |  " + str(self.titulo)
@@ -31,10 +33,11 @@ class Serie(models.Model):
     
 class Musica(models.Model):
     autor=models.CharField(max_length=50, default="")
+    image= models.ImageField(null=True, blank=True,upload_to="images/musica/")
     nombre= models.CharField(max_length=50)
     pais= models.CharField(max_length=40)
     genero= models.CharField(max_length=30)
-    body=models.TextField(default="")
+    reseña=models.TextField(default="")
     
     def __str__(self):
         return self.autor + "  |  " + str(self.nombre)
@@ -42,13 +45,7 @@ class Musica(models.Model):
     def get_absolute_url(self):
         return reverse("Ver Musica")
 
-"""class Posteos(models.Model):
-    titulo= models.CharField(max_length=255)
-    autor=models.ForeignKey(User, on_delete=models.CASCADE)
-    body=models.TextField(default=0)
-    
-    def __str__(self):
-        return self.titulo + "  |  " + str(self.autor)"""
+
     
     
     

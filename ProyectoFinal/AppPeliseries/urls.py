@@ -16,6 +16,8 @@ urlpatterns = [
     path('/detalle_peli/<int:pk>', PeliDetalle.as_view(), name= 'Detalle Peli'),
     path('/editar_peli/<int:pk>', PeliUpdate.as_view(), name= 'Editar Peli'),
     path('/borrar_peli/<int:pk>', PeliDelete.as_view(), name= 'Borrar Peli'),
+    path('/buscarpeli/', busquedapeli, name= "Buscar Peli"),
+    path('/resultado/', resultadoBusqueda, name= "Resultadado"),
     
     
     #Series

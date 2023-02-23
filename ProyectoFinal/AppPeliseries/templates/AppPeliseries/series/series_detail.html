@@ -14,10 +14,10 @@
        
                                 Autor: {{serie.autor}} <hr><br>
                                 Titulo: {{serie.titulo}} <hr><br>
-                                Año de estreno: {{serie.añoestreño}} <br>
-                                Cantidad de episodios: {{serie.cantepisodios}} <br>
+                                {% if serie.image %}<img src="{{ serie.image.url }}" width="350" height="450"><hr><br> {% endif%}
+                                Año de estreno: {{serie.añoestreno}} <br>
                                 Genero: {{serie.genero}} <br><hr>
-                                Body: {{serie.body}} <br>
+                                Reseña: {{serie.reseña}} <br>
                          
         
                                        

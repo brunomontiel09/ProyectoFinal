@@ -14,10 +14,10 @@
        
                                 Autor: {{pelicula.autor}} <hr><br>
                                 Titulo: {{pelicula.titulo}} <hr><br>
-                                Año de estreno: {{pelicula.añoestreño}} <br>
-                                Duracion: {{pelicula.duracion}} <br>
+                                {% if pelicula.image %}<img src="{{ pelicula.image.url }}" width="300" height="450"><hr><br>{% endif %}
+                                Año de estreno: {{pelicula.añoestreno}} <br>
                                 Genero: {{pelicula.genero}} <br><hr>
-                                Body: {{pelicula.body}} <br>
+                                Reseña: {{pelicula.reseña}} <br>
                          
         
                                        

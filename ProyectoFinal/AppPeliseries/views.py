@@ -8,11 +8,107 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, authenticate
-
+from django.http import HttpResponse
 # Create your views here.
 
 def inicio(request):
     return render(request, "AppPeliseries/inicio1.html")
+
+#Home
+
+def acercaDe(request):
+    return render(request, "AppPeliseries/acercade.html")
+
+def contacto(request):
+    return render(request, "AppPeliseries/contacto.html")
+
+def editarusuario(request):
+    
+    usuario=request.user
+    
+    if request.method == "POST":
+        
+        form =EditarUsuario(request.POST)
+        
+        if form.is_valid():
+            
+            info=form.cleaned_data
+            usuario.email=info["email"]
+            usuario.set_password(info["password1"])
+            usuario.first_name= info["first_name"]
+            usuario.last_name= info["last_name"]
+            
+            usuario.save()
+            
+            return render(request, "AppPeliseries/inicio1.html")
+        
+    else:
+            form  = EditarUsuario(initial={
+                "email":usuario.email,
+                "first_name":usuario.first_name,
+                "last_name":usuario.last_name,
+            })
+            
+    return render(request,"AppPeliseries/editar.html", {"formulario1": form, "usuario": usuario}  )
+
+def inicioSesion(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data = request.POST)
+        if form.is_valid():
+            usuario= form.cleaned_data.get("username")
+            contra= form.cleaned_data.get("password")
+            
+            user= authenticate(username= usuario, password= contra)
+            
+            if user:
+                login(request, user)
+                
+                return render(request, "AppPeliseries/inicio1.html", {'mensaje': f"{user}"})
+            
+        else:
+            return render(request,"AppPeliseries/inicio1.html", {'mensaje': f"Datos invalidos"})
+            
+    else:
+        form= AuthenticationForm()
+    
+    return render(request, "AppPeliseries/login.html", {"formulario": form})
+
+
+def registro(request):
+    
+    if request.method == "POST":
+        form =NewUserForm(request.POST)
+        
+        if form.is_valid():
+            
+            username=form.cleaned_data["username"]
+            form.save()
+            context= {'mensaje': "Ahora puedes iniciar sesion"}
+            return render(request, "AppPeliseries/inicio1.html", context)
+        
+    else:
+            form  = NewUserForm()
+            
+    return render(request,"AppPeliseries/registro.html", {"formulario1": form} )
+
+
+#Buscar objetos  
+     
+def busquedapeli(request):
+     return render(request, "AppPeliseries/peliculas/busquedaPosteo.html")
+
+def resultadoBusqueda(request):
+     
+     if request.GET['titulo']:
+          titulo = request.GET['titulo']
+          pelicula= Pelicula.objects.filter(titulo__contains=titulo)
+          return render(request, "AppPeliseries/peliculas/resultado.html", {"titulo": titulo, "pelicula": pelicula})
+     
+     else:
+          
+          respuesta= "No enviaste datos"
+          
+          return HttpResponse(respuesta)
 
 #peliculas
 class PeliView(LoginRequiredMixin, ListView):
@@ -97,86 +193,12 @@ class MusicaUpdate(LoginRequiredMixin, UpdateView):
 class MusicaDelete(LoginRequiredMixin, DeleteView):
     model=Musica
     template_name='AppPeliseries/musica/music_delete.html'
-    success_url= reverse_lazy('Ver Series')
-
-def acercaDe(request):
-    return render(request, "AppPeliseries/acercade.html")
-
-def contacto(request):
-    return render(request, "AppPeliseries/contacto.html")
-
-def editarusuario(request):
-    
-    usuario=request.user
-    
-    if request.method == "POST":
-        
-        form =EditarUsuario(request.POST)
-        
-        if form.is_valid():
-            
-            info=form.cleaned_data
-            usuario.email=info["email"]
-            usuario.set_password(info["password1"])
-            usuario.first_name= info["first_name"]
-            usuario.last_name= info["last_name"]
-            
-            usuario.save()
-            
-            return render(request, "AppPeliseries/inicio1.html")
-        
-    else:
-            form  = EditarUsuario(initial={
-                "email":usuario.email,
-                "first_name":usuario.first_name,
-                "last_name":usuario.last_name,
-            })
-            
-    return render(request,"AppPeliseries/editar.html", {"formulario1": form, "usuario": usuario}  )
-
-def inicioSesion(request):
-    if request.method == "POST":
-        form = AuthenticationForm(request, data = request.POST)
-        if form.is_valid():
-            usuario= form.cleaned_data.get("username")
-            contra= form.cleaned_data.get("password")
-            
-            user= authenticate(username= usuario, password= contra)
-            
-            if user:
-                login(request, user)
-                
-                return render(request, "AppPeliseries/inicio1.html", {'mensaje': f"{user}"})
-            
-        else:
-            return render(request,"AppPeliseries/inicio1.html", {'mensaje': f"Datos invalidos"})
-            
-    else:
-        form= AuthenticationForm()
-    
-    return render(request, "AppPeliseries/login.html", {"formulario": form})
-
-
-def registro(request):
-    
-    if request.method == "POST":
-        form =NewUserForm(request.POST)
-        
-        if form.is_valid():
-            
-            username=form.cleaned_data["username"]
-            form.save()
-            context= {'mensaje': "Ahora puedes iniciar sesion"}
-            return render(request, "AppPeliseries/inicio1.html", context)
-        
-    else:
-            form  = NewUserForm()
-            
-    return render(request,"AppPeliseries/registro.html", {"formulario1": form} )
+    success_url= reverse_lazy('Ver Musica')
 
 
 
-#?next={% url 'homepage' %}"
+
+
 
 
 

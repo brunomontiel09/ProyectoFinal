@@ -14,9 +14,10 @@
        
                                 Autor: {{musica.autor}} <hr><br>
                                 Nombre del Artista: {{musica.nombre}} <hr><br>
+                                {% if musica.image %}<img src="{{ musica.image.url }}" width="300" height="200"><hr><br>{% endif%}
                                 Pais: {{musica.pais}} <br>
-                                Genero: {{serie.genero}} <br><hr>
-                                Body: {{serie.body}} <br>
+                                Genero: {{musica.genero}} <br><hr>
+                                Reseña: {{musica.reseña}} <br>
                          
         
                                        
