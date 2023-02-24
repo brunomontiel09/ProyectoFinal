@@ -10,7 +10,13 @@
                 <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
                     <div class="col-xl-4 col-lg-5">
                         <div class="featured-text text-center text-lg-left">
+                            <form action="{% url 'ResultadoM' %}" method="GET">
 
+                                <input type="text", name="buscar">
+                                <input type="submit" value="Buscar">
+                            
+                                </form>
+                                {{respuesta}}
                             <p class="text-black-50 mb-0">{% for musica in object_list %}
 
                                 <p></p> Autor: {{musica.autor}}

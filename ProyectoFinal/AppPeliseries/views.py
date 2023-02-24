@@ -9,6 +9,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+
+
 # Create your views here.
 
 def inicio(request):
@@ -92,23 +96,7 @@ def registro(request):
     return render(request,"AppPeliseries/registro.html", {"formulario1": form} )
 
 
-#Buscar objetos  
-     
-def busquedapeli(request):
-     return render(request, "AppPeliseries/peliculas/busquedaPosteo.html")
 
-def resultadoBusqueda(request):
-     
-     if request.GET['titulo']:
-          titulo = request.GET['titulo']
-          pelicula= Pelicula.objects.filter(titulo__contains=titulo)
-          return render(request, "AppPeliseries/peliculas/resultado.html", {"titulo": titulo, "pelicula": pelicula})
-     
-     else:
-          
-          respuesta= "No enviaste datos"
-          
-          return HttpResponse(respuesta)
 
 #peliculas
 class PeliView(LoginRequiredMixin, ListView):
@@ -139,7 +127,29 @@ class PeliDelete(LoginRequiredMixin, DeleteView):
     template_name='AppPeliseries/peliculas/peli_delete.html'
     success_url= reverse_lazy('Ver Peliculas')
     
+#Buscar objetos  
+@login_required
+def busquedapeli(request):
+     return render(request, "AppPeliseries/peliculas/busquedaPosteo.html")
+ 
+    
 
+
+def resultadoBusqueda(request):
+     
+    if request.GET['buscar']:
+        buscar = request.GET['buscar']
+        print(buscar)
+        pelicula= Pelicula.objects.filter(titulo__icontains=buscar)
+        print("resultados", pelicula)
+        return render(request, "AppPeliseries/peliculas/resultado.html", {"buscar": buscar, "pelicula": pelicula})
+     
+    else:
+          
+        respuesta= " ERROR! No enviaste datos"
+          
+        return render(request, "AppPeliseries/peliculas/busquedaPosteo.html",{'respuesta': respuesta})
+    
 #series
 class SerieView(LoginRequiredMixin, ListView):
     model= Serie
@@ -167,7 +177,24 @@ class SerieDelete(LoginRequiredMixin, DeleteView):
     template_name='AppPeliseries/series/serie_delete.html'
     success_url= reverse_lazy('Ver Series')
     
-    
+    #Buscar objetos  
+@login_required
+def busquedaserie(request):
+     return render(request, "AppPeliseries/series/busquedaPosteo.html")
+ 
+
+def resultadoBusquedaS(request):
+     
+    if request.GET['buscar']:
+        buscar = request.GET['buscar']
+        serie= Serie.objects.filter(titulo__icontains=buscar)
+        return render(request, "AppPeliseries/series/resultado.html", {"buscar": buscar, "serie": serie})
+     
+    else:
+          
+        respuesta= " ERROR! No enviaste datos"
+          
+        return render(request, "AppPeliseries/series/busquedaPosteo.html",{'respuesta': respuesta})
     
 #musica
 class MusicView(LoginRequiredMixin, ListView):
@@ -195,6 +222,26 @@ class MusicaDelete(LoginRequiredMixin, DeleteView):
     template_name='AppPeliseries/musica/music_delete.html'
     success_url= reverse_lazy('Ver Musica')
 
+#Buscar objetos  
+@login_required
+def busquedamusica(request):
+     return render(request, "AppPeliseries/musica/busquedaPosteo.html")
+ 
+    
+
+
+def resultadoBusquedaM(request):
+     
+    if request.GET['buscar']:
+        buscar = request.GET['buscar']
+        musica= Musica.objects.filter(nombre__icontains=buscar)
+        return render(request, "AppPeliseries/musica/resultado.html", {"buscar": buscar, "musica": musica})
+     
+    else:
+          
+        respuesta= " ERROR! No enviaste datos"
+          
+        return render(request, "AppPeliseries/musica/busquedaPosteo.html",{'respuesta': respuesta})
 
 
 
