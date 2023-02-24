@@ -139,9 +139,7 @@ def resultadoBusqueda(request):
      
     if request.GET['buscar']:
         buscar = request.GET['buscar']
-        print(buscar)
         pelicula= Pelicula.objects.filter(titulo__icontains=buscar)
-        print("resultados", pelicula)
         return render(request, "AppPeliseries/peliculas/resultado.html", {"buscar": buscar, "pelicula": pelicula})
      
     else:
